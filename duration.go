@@ -1,6 +1,7 @@
 package timex
 
 import (
+	"context"
 	"time"
 )
 
@@ -57,6 +58,18 @@ func (d Duration) Weeks() float64 {
 	hour := d / Hour
 	nsec := d % Hour
 	return float64(hour) + float64(nsec)*(1e-9/60/60/24/7)
+}
+
+func (self Duration) SleepContext(ctx context.Context) bool {
+	timer := time.NewTimer(time.Duration(self))
+	select {
+	case <-ctx.Done():
+		timer.Stop()
+		return false
+	case <-timer.C:
+		timer.Stop()
+		return true
+	}
 }
 
 func (self Duration) string() string {
