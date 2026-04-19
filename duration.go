@@ -72,6 +72,10 @@ func (self Duration) SleepContext(ctx context.Context) bool {
 	}
 }
 
+func (self Duration) Std() time.Duration {
+	return time.Duration(self)
+}
+
 func (self Duration) string() string {
 	t := durationOrigin.Add(time.Duration(self))
 	return t.Format(durationLayout)
